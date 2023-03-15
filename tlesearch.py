@@ -19,6 +19,8 @@ def search():
             elev = float(elev)
             if (-90 <= lat <= 90) and (-180 <= lon <= 180):
                 groundcoord = (str(lat), str(lon), float(elev))
+                print("\nNew observer coordinates -> LAT =", groundcoord[0], "| LON =",
+                      groundcoord[1], "| HEIGHT =", groundcoord[2])
             else:
                 print("\nInvalid Coordinates")
                 return search()
