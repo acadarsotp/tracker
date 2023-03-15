@@ -8,11 +8,7 @@ from tqdm import tqdm
 def askupdate():
     choice = input("\nDo you want to download new satellite data? (y/n): ")
     if choice.lower() == "y":
-        try:
-            return update_data()
-        except urllib3.exceptions.MaxRetryError:
-            print("\nCould not download celestrak data, check your connection and try again")
-            return askupdate()
+        update_data()
     elif choice.lower() == "n":
         return
     else:
@@ -23,11 +19,15 @@ def askupdate():
 # Function to parse the TLE file and extract the satellite data, returns true if the access is denied or false if
 # access is granted.
 def get_data():
-    satellites = []
-    http = urllib3.PoolManager()
-    response = http.request('GET', "https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle")
-    data = response.data.decode('utf-8')
-    lines = data.splitlines()
+    try:
+        satellites = []
+        http = urllib3.PoolManager()
+        response = http.request('GET', "https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle")
+        data = response.data.decode('utf-8')
+        lines = data.splitlines()
+    except urllib3.exceptions.MaxRetryError:
+        print("Unable to reach celestrak.com, try again")
+        return True, askupdate()
 
     if len(lines) < 1000:
         print("\nAccess blocked by celestrak due to too many downloads, try again later.")
@@ -61,18 +61,6 @@ def update_data():
     mycursor.execute("CREATE DATABASE celestrak")
     """
 
-    # Connect to the database
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="YOUR USER",
-        password="YOUR PASSWORD",
-        database="celestrak"
-    )
-    mycursor = mydb.cursor()
-
-    # Delete the old data
-    mycursor.execute("DELETE FROM satellites")
-
     """
     # Create a table to store the satellite data
     mycursor.execute(
@@ -82,9 +70,21 @@ def update_data():
     """
 
     # Parse the TLE file and insert the satellite data into the table
-
     access_blocked, satellites = get_data()
     if not access_blocked:
+        # Connect to the database
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="YOUR USER",
+            password="YOUR PASSWORD",
+            database="celestrak"
+        )
+        mycursor = mydb.cursor()
+
+        # Delete the old data
+        mycursor.execute("DELETE FROM satellites")
+
+        # Update new data
         print("Updating data to MySQL Database")
         sql = "REPLACE INTO satellites (id, name, line1, line2) VALUES (%s, %s, %s, %s)"
         val = [(sat['id'], sat['name'], sat['line1'], sat['line2']) for sat in tqdm(satellites)]
