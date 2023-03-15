@@ -27,5 +27,5 @@ Contributions are welcome! If you would like to contribute to this project, plea
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 ## Acknowledgements
-I would like to acknowledge andresv/satellitetracker.py for his code. The Python class declaration that I used was based on his work.
+I would like to acknowledge andresv for his code. The Python class declaration that I used was based on his work.
 This project uses data from celestrak.com.
