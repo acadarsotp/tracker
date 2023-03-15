@@ -61,7 +61,7 @@ def search():
     print("\nChoose a satellite:")
     for i, row in enumerate(results):
         print(f"{i + 1}. {row[0]}")
-    print(f"{len(results)+1}.", "BACK TO SEARCH")
+    print(f"{len(results) + 1}.", "BACK TO SEARCH")
     try:
         choice = int(input("\nEnter number of choice: "))
 
@@ -70,7 +70,7 @@ def search():
             db.close()
             return search()
 
-        if choice == len(results)+1:
+        if choice == len(results) + 1:
             db.close()
             return search()
         # Get the TLE of the chosen satellite
@@ -99,16 +99,17 @@ def search():
         observer.elevation = groundcoord[2]
         next_pass = observer.next_pass(sat)
         sat.compute(observer)
-        if degrees(sat.alt) > 0:
-            print("\nPass ongoing with an elevation of:", degrees(sat.alt))
-        print(f"\nNext pass for {chosen_sat_name}:")
-        print(f"Rise time UTC: {next_pass[0]}")
-        print(f"Set time UTC: {next_pass[4]}")
-        confirm = input(f"\nTrack {chosen_sat_name}? (y/n): ")
     except ValueError:
         print("Unable to compute pass over objective, this satellite may never go over your horizon.")
         db.close()
         return search()
+
+    if degrees(sat.alt) > 0:
+        print("\nPass ongoing with an elevation of:", degrees(sat.alt))
+    print(f"\nNext pass for {chosen_sat_name}:")
+    print(f"Rise time UTC: {next_pass[0]}")
+    print(f"Set time UTC: {next_pass[4]}")
+    confirm = input(f"\nTrack {chosen_sat_name}? (y/n): ")
 
     # If user confirms, extract TLE into a dictionary
 
