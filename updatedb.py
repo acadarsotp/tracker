@@ -53,8 +53,8 @@ def update_data():
     # Connect to the MySQL server and create a database
     mydb = mysql.connector.connect(
         host="localhost",
-        user="root",
-        password="root"
+        user="YOUR USER",
+        password="YOUR PASSWORD"
     )
     mycursor = mydb.cursor()
     #mycursor.execute("DROP DATABASE celestrak")
@@ -64,8 +64,8 @@ def update_data():
     # Connect to the database
     mydb = mysql.connector.connect(
         host="localhost",
-        user="root",
-        password="root",
+        user="YOUR USER",
+        password="YOUR PASSWORD",
         database="celestrak"
     )
     mycursor = mydb.cursor()
