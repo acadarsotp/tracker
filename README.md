@@ -9,7 +9,7 @@ To use this project, you will need:
 * A microcontroller with serial communication capability
 To get started, follow these steps:
 1. Clone this repository to your local machine.
-2. Create a MySQL database and import the satellite.sql file included in the repository.
+2. Create a MySQL database and import the celestrak.sql file included in the repository.
 3. Modify the updatedb.py file to include your database credentials.
 4. Install the required Python packages by running pip install -r requirements.txt.
 5. Run the main.py file to start tracking satellites.
