@@ -11,7 +11,8 @@ import ephem
 ser, comm = datalink.link_arduino()
 
 # Wait for the Arduino to reset
-time.sleep(2)
+if comm:
+    time.sleep(2)
 
 # Update satellite database
 updatedb.askupdate()
@@ -64,8 +65,8 @@ while True:
         tracker.set_epoch(time.time())
         az = tracker.azimuth()
         el = tracker.elevation()
-        data = f"{az},{el}\n".encode()
         if comm:
+            data = f"{az},{el}\n".encode()
             ser.write(data)
         print("Azimuth: ", az)
         print("Elevation: ", el)
