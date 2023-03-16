@@ -73,6 +73,7 @@ def search():
         if choice == len(results) + 1:
             db.close()
             return search()
+
         # Get the TLE of the chosen satellite
 
         chosen_sat_name = results[choice - 1][0]
@@ -106,6 +107,7 @@ def search():
 
     if degrees(sat.alt) > 0:
         print("\nPass ongoing with an elevation of:", degrees(sat.alt))
+
     print(f"\nNext pass for {chosen_sat_name}:")
     print(f"Rise time UTC: {next_pass[0]}")
     print(f"Set time UTC: {next_pass[4]}")

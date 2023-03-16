@@ -10,9 +10,7 @@ import ephem
 # Check the serial port
 ser, comm = datalink.link_arduino()
 
-# Wait for the Arduino to reset
-if comm:
-    time.sleep(2)
+# Wait for the Arduino to reset -> moved to datalink
 
 # Update satellite database
 updatedb.askupdate()
@@ -58,7 +56,11 @@ class Tracker:
         return self.satellite.range
 
 
+# Create tracker object based on user choice
 tracker = Tracker(satellite=tle, groundstation=groundcoord)
+
+# Random ACK number to start sending data
+ACK_counter = 0
 
 while True:
     try:
@@ -66,11 +68,9 @@ while True:
         az = tracker.azimuth()
         el = tracker.elevation()
         if comm:
-            data = f"{az},{el}\n".encode()
-            ser.write(data)
-        print("Azimuth: ", az)
-        print("Elevation: ", el)
-        time.sleep(1)
+            datalink.comm_data(ser, ACK_counter, az, el)
+            ACK_counter = ACK_counter + 1
+
     except KeyboardInterrupt:
         print("\nTracker paused")
         ser, comm = datalink.link_arduino()

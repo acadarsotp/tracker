@@ -75,8 +75,8 @@ def update_data():
         # Connect to the database
         mydb = mysql.connector.connect(
             host="localhost",
-            user="YOUR USER",
-            password="YOUR PASSWORD",
+            user="root",
+            password="root",
             database="celestrak"
         )
         mycursor = mydb.cursor()
